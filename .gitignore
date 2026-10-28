@@ -1,0 +1,13 @@
+# Secrets and local configuration: never commit these
+.env
+.streamlit/secrets.toml
+
+# Local data (the diet app stores patient records in diet_system.db)
+*.db
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

@@ -7,7 +7,29 @@ from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import GoogleGenerativeAI
 
 
-os.environ["GOOGLE_API_KEY"] = "YOUR_GOOGLE_API_KEY"
+def _load_api_key():
+    """Get GOOGLE_API_KEY from the environment, a local .env file (git-ignored) or Streamlit secrets.
+    The key must never be written into the source code or committed to the repository."""
+    key = os.environ.get("GOOGLE_API_KEY")
+    if not key and os.path.exists(".env"):
+        with open(".env", encoding="utf-8") as f:
+            for line in f:
+                name, sep, value = line.strip().partition("=")
+                if sep and name.strip() == "GOOGLE_API_KEY":
+                    key = value.strip().strip("\"'")
+    if not key:
+        try:
+            key = st.secrets["GOOGLE_API_KEY"]
+        except Exception:  # no Streamlit secrets configured
+            key = None
+    if not key:
+        st.error("GOOGLE_API_KEY is not set. Create a key in Google AI Studio and provide it as an environment "
+                 "variable, in a local .env file, or as a Streamlit secret (see the README).")
+        st.stop()
+    os.environ["GOOGLE_API_KEY"] = key
+
+
+_load_api_key()
 
 
 def create_db():

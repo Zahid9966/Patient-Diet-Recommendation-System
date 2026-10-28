@@ -69,9 +69,13 @@ pip install -r requirements.txt
 
 2. Add Your API Key
 
-Create a .env file:
+Create a key in [Google AI Studio](https://aistudio.google.com/) and provide it in **one** of these ways (checked in this order):
 
-GOOGLE_API_KEY=your_key_here
+- an environment variable: `export GOOGLE_API_KEY="your_key_here"`
+- a `.env` file next to `app.py` containing `GOOGLE_API_KEY=your_key_here` (the file is git-ignored)
+- a Streamlit secret named `GOOGLE_API_KEY` (for example on Streamlit Community Cloud: Settings → Secrets)
+
+Never commit your key. If the key is missing, the app shows an error instead of starting.
 
 3. Run Streamlit App
 streamlit run app.py
@@ -105,3 +109,7 @@ Multi-language support
 🙌 Contributors
 
 Zahid Shaikh – Developer
+
+🔒 Data & Privacy
+
+Each submitted patient record is stored in plain text in a local SQLite file, `diet_system.db`, created next to `app.py`. The file is git-ignored; keep it that way, and do not publish or share it, because it contains health information. Patient details are also sent to Google's Gemini API to generate the recommendation.
